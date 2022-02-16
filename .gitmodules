@@ -1,0 +1,3 @@
+[submodule "ekf-simulation/eigen"]
+	path = ekf-simulation/eigen
+	url = https://github.com/PlanetaryRobotics/eigen.git
