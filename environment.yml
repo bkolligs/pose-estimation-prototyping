@@ -1,0 +1,10 @@
+name: proto-pose
+dependencies:
+  - python=3.8
+  - pip
+  - numpy=1.21.*
+  - matplotlib=3.4.*
+  - pytest=6.2.5
+  - pybind11
+  - pip:
+    - "git+https://github.com/bkolligs/pyrobo.git@main"
