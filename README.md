@@ -34,7 +34,11 @@ make
 sudo make install
 ```
 
+<<<<<<< HEAD
 These commands build a shared library and install it in the `site-packages` directory corresponding to the current `python` executable, which should be in the`proto-pose` conda environment if you used conda. Otherwise it will correspond to your `python3` executable, so any files should be run with that version of python. For example, `python3 ekf_verify.py`. This creates a `python` package called `moonranger` that can be accessed like this:
+=======
+These commands build a shared library and install it in the `site-packages` directory corresponding to the current `python` executable, which should be in the`proto-pose` conda environment. This creates a `python` package called `moonranger` that can be accessed like this:
+>>>>>>> fe03e78 (Sensor now generates faux noisy data and reflects this in the simulation)
 
 ```python
 import moonranger as m
