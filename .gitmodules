@@ -1,3 +1,3 @@
-[submodule "ekf-simulation/eigen"]
+[submodule "ekf-simulation/libs/eigen"]
 	path = ekf-simulation/libs/eigen
-	url = https://github.com/PlanetaryRobotics/eigen.git
+	url = git@github.com:PlanetaryRobotics/eigen.git
