@@ -12,7 +12,6 @@ PYBIND11_MODULE(ekf, m) {
 		.def("is_ekf_initialized", &OrientationEKF::isEKFInitialized, "Checks whether the EKF is initialized")
 		.def("handle_imu", &OrientationEKF::handleIMU, "Measurement update for the IMU")
 		.def("handle_sun_sensor", &OrientationEKF::handleSunSensor, "Measurement update for the sun sensor")
-		.def("handle_imu_initialization", &OrientationEKF::handleIMUInitialization, "Initialize EKF")
 		.def("compute_f", &OrientationEKF::computeF)
 		.def("compute_g", &OrientationEKF::computeG)
 		.def("compute_phi_and_qdk", &OrientationEKF::computePhiAndQdk)
@@ -21,5 +20,7 @@ PYBIND11_MODULE(ekf, m) {
 		.def("get_g", &OrientationEKF::getG)
 		.def("get_phi", &OrientationEKF::getPhi)
 		.def("get_ori", &OrientationEKF::getOriValues)
+		.def("set_imu_count", &OrientationEKF::setIMUCount)
+		.def("get_imu_count", &OrientationEKF::getIMUCount)
 		;
 }

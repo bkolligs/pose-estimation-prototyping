@@ -27,7 +27,7 @@ make
 make install
 ```
 
-These commands build a shared library in the `site-packages` directory corresponding to the current `python` executable, which should be in the`proto-pose` conda environment. This creates a `python` package called `moonranger` that can be accessed like this:
+These commands build a shared library and install it in the `site-packages` directory corresponding to the current `python` executable, which should be in the`proto-pose` conda environment. This creates a `python` package called `moonranger` that can be accessed like this:
 
 ```python
 import moonranger as m

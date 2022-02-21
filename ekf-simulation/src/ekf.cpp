@@ -275,21 +275,21 @@ void OrientationEKF::measurementUpdate(const Eigen::Matrix<double, 2, 9>& H,
     covariance_ = (covariance_ + covariance_.transpose()) / 2.0;
 }
 
-void OrientationEKF::handleIMUInitialization(const Vector3& measAng,
-                                             const Vector3& measAcc) {
-    /* Handle the initialization of the EKF  */
-    if (imuCount_ < numInitIMUData_ and not isEKFInitialized_) {
-        initSumAccel_ += measAcc;
-        initSumGyro_ += measAng;
-        imuCount_++;
-    } else {
-        /* Notify the class we've received enough IMU data to initialize */
-        receivedIMUInitData_ = true;
-    }
-}
-
 int32 OrientationEKF::handleIMU(const Vector3& measAng,
                                 const Vector3& measAcc) {
+                                        imuCount_++;
+    if (imuCount_ < numInitIMUData_) {
+        // Initialize the biases by averaging many values at the beginning. 
+        initSumAccel_ +=
+            measAcc;   // TODO + or -? Haidar's imit_ekf.cpp uses -=
+        initSumGyro_ += measAng;
+    } else {   // We've received enough IMU data; proceed to initialize the EKF
+        if (not isEKFInitialized_) {
+            receivedIMUInitData_ = true;
+            initializeEKF();
+        }
+    }
+
     /* Current body orientation */
     Quaternion prevBodyOrientation{state_(0), state_(1), state_(2), state_(3)};
 
