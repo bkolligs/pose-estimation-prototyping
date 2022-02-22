@@ -9,7 +9,7 @@ The main components tested here are as follows:
 3. [Translation Estimation](translation-quaternions): Tests that verify we can use wheel velocities to estimate 3D position for a certain timestep.
 
 ## EKF Simulation Setup
-The main dependencies for this project include a robotics package I wrote that contains helpful visualization tools, NumPy, [PyBind11](https://github.com/pybind/pybind11), and Matplotlib.
+The main dependencies for this project include a robotics package I wrote that contains helpful visualization tools called [PyRobo](https://github.com/bkolligs/pyrobo), NumPy, [PyBind11](https://github.com/pybind/pybind11), and Matplotlib.
 
 All of these dependencies can be installed in a [Conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html) environment with the following command: 
 ```bash
@@ -24,10 +24,10 @@ mkdir build
 cd build
 cmake ..
 make
-make install
+sudo make install
 ```
 
-These commands build a shared library in the `site-packages` directory corresponding to the current `python` executable, which should be in the`proto-pose` conda environment. This creates a `python` package called `moonranger` that can be accessed like this:
+These commands build a shared library and install it in the `site-packages` directory corresponding to the current `python` executable, which should be in the`proto-pose` conda environment if you used conda. Otherwise it will correspond to your `python3` executable, so any files should be run with that version of python. For example, `python3 ekf_verify.py`. This creates a `python` package called `moonranger` that can be accessed like this:
 
 ```python
 import moonranger as m
