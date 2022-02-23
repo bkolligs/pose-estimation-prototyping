@@ -11,9 +11,16 @@ The main components tested here are as follows:
 ## EKF Simulation Setup
 The main dependencies for this project include a robotics package I wrote that contains helpful visualization tools called [PyRobo](https://github.com/bkolligs/pyrobo), NumPy, [PyBind11](https://github.com/pybind/pybind11), and Matplotlib.
 
-All of these dependencies can be installed in a [Conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html) environment with the following command: 
+The easiest way to install all of these dependencies is to use a [Conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html) environment with the following command: 
 ```bash
 conda env create -f environment.yml
+```
+
+Otherwise you will need to use `pip`:
+
+```bash
+pip install pybind11[global] 
+pip install git+https://github.com/bkolligs/pyrobo.git@main
 ```
 
 Then we can install all of the C++ code by performing the following commands in the top level directory: 
