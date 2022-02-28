@@ -1,3 +1,4 @@
+import numpy as np
 import matplotlib.pyplot as plt
 import moonranger as m
 from termcolor import colored
@@ -9,9 +10,15 @@ if __name__ == '__main__':
     rover = NoisyRover(sigma_gyro=0.5)
     ekf = m.OrientationEKF()
     ekf.set_imu_count(500)
+    for i in range(100):
+        # Generate some noisy data
+        rover.simulate()
+        rover.plot()
 
-    print(f"Starting EKF as Initialized: {ekf.is_ekf_initialized()}")
+	print("Performing test")
     time, gyro, accel, inclin = parseIMUFile("../imu_data_logs/imu_data4.txt")
+    rover = NoisyRover(sigma_imu=0.5)
+
 
     num_datapoints = len(time)
 
