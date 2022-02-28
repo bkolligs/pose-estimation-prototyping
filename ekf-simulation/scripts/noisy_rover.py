@@ -44,9 +44,10 @@ class NoisyRover:
         )
         return gyro_noisy, acc_noisy, incl_noisy
 
-    def simulate(self):
-        imu_sensor, acc_sensor, incl_sensor = self.noisy_data()
-        self.ekf.handle_imu(imu_sensor, acc_sensor)
+    def simulate(self, gyro_sensor=None, acc_sensor=None, incl_sensor=None, generate=False):
+        if generate:
+            gyro_sensor, acc_sensor, incl_sensor = self.noisy_data()
+        self.ekf.handle_imu(gyro_sensor, acc_sensor)
         state = self.ekf.get_state()
         self.ori = r.Quaternion(state[0], state[1], state[2], state[3])
 
