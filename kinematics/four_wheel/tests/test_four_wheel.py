@@ -1,6 +1,6 @@
 import pytest
 import numpy as np
-from kinematics import FourWheel
+from four_wheel.four_wheel import FourWheel
 
 
 @pytest.fixture
