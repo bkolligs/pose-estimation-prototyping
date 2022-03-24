@@ -166,9 +166,6 @@ class OrientationEKF {
      */
     int32 handleIMU(const Vector3 &measAng, const Vector3 &measAcc);
 
-    void handleIMUInitialization(const Vector3 &measAng,
-                                 const Vector3 &measAcc);
-
     /**
      * @brief Computes the F matrix in the equation dx_dot = F*dx + G*w
      */
@@ -225,6 +222,10 @@ class OrientationEKF {
 
     void setnoiseLambdaA(double lambdaA);
 
+    void setIMUCount(int32 imuCount){imuCount_ = imuCount;}
+
+    int32 getIMUCount(){return imuCount_;}
+
     Eigen::Matrix<double, 9, 9> getF();
 
     Eigen::Matrix<double, 9, 12> getG();
@@ -236,6 +237,7 @@ class OrientationEKF {
     Eigen::Quaternion<double> getOriQuat();
 
     Eigen::Matrix<double, 4, 1> getOriValues();
+
 };
 
 }   // namespace orientation_ekf
