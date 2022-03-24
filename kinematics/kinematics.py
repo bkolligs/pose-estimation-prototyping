@@ -109,7 +109,7 @@ def trajectory(t, max_time=10):
     ]
 
     if t > time_splits[0] and t <= time_splits[1]:
-        return [0.05, 0.05, 0.05, 0.05]
+        return [0.02, 0.02, 0.02, 0.02]
     elif t > time_splits[1] and t <= time_splits[2]:
         return [0.05, 0.01, 0.05, 0.01]
     elif t > time_splits[2] and t <= time_splits[3]:
