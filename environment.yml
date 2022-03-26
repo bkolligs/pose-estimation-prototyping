@@ -7,4 +7,5 @@ dependencies:
   - pytest=6.2.5
   - pybind11
   - pip:
+    - rich
     - "git+https://github.com/bkolligs/pyrobo.git@main"

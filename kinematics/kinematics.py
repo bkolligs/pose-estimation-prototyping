@@ -1,4 +1,5 @@
 import numpy as np
+from rich.progress import track
 import matplotlib.pyplot as plt
 from four_wheel.four_wheel import FourWheel
 from four_wheel.utils import drive_arc_convert
@@ -6,7 +7,12 @@ from four_wheel.utils import drive_arc_convert
 
 class NoisyRover:
     def __init__(
-        self, initial_state=[0, 0, 0, 0, 0, 0, 0], wheel_sigma=0.1, delta_t=0.01, max_speed=0.05) -> None:
+        self,
+        initial_state=[0, 0, 0, 0, 0, 0, 0],
+        wheel_sigma=0.1,
+        delta_t=0.01,
+        max_speed=0.05,
+    ) -> None:
         self.max_speed = max_speed
         self.delta_t = delta_t
         self.wheel_sigma = wheel_sigma
@@ -59,10 +65,10 @@ class NoisyRover:
         return noisy_encoders
 
     def step(self, wheel_vel: list):
-        if not isinstance(wheel_vel, np.ndarray): wheel_vel = np.array(wheel_vel).reshape(-1, 1)
+        if not isinstance(wheel_vel, np.ndarray):
+            wheel_vel = np.array(wheel_vel).reshape(-1, 1)
         wheel_vel = np.clip(wheel_vel, a_min=-self.max_speed, a_max=self.max_speed)
         self.runge_kutta_integration(wheel_vel)
-    
 
     def plot_step(self, t=None):
         """
@@ -71,14 +77,21 @@ class NoisyRover:
         plt.clf()
         ax = plt.axes()
         # plot the location and orientation
-        rectangle = plt.Rectangle(xy=(self.state[0], self.state[1]), width=self.width, height=self.length, angle=np.rad2deg(self.state[2]))
+        rectangle = plt.Rectangle(
+            xy=(self.state[0], self.state[1]),
+            width=self.width,
+            height=self.length,
+            angle=np.rad2deg(self.state[2]),
+        )
         ax.add_patch(rectangle)
-        if t is not None: ax.set_title(f"Simulation at time {t:.2f}")
+        if t is not None:
+            ax.set_title(f"Simulation at time {t:.2f}")
         ax.set_xlim(-1, 1)
         ax.set_ylim(-1, 1)
         plt.draw()
         plt.pause(0.01)
-    
+
+
 def plot_simulation(regular_rover: NoisyRover, noisy_rover: NoisyRover):
     """
     Plots the results of the simulation
@@ -86,8 +99,13 @@ def plot_simulation(regular_rover: NoisyRover, noisy_rover: NoisyRover):
     plt.figure()
     noisy_states = np.array(noisy_rover.states)
     regular_states = np.array(regular_rover.states)
-    plt.plot(noisy_states[:, 0], noisy_states[:, 1], 'r', label=f"Noisy, $\sigma$={noisy_rover.wheel_sigma}")
-    plt.plot(regular_states[:, 0], regular_states[:, 1], 'b', label="Ground Truth")
+    plt.plot(
+        noisy_states[:, 0],
+        noisy_states[:, 1],
+        "r",
+        label=f"Noisy, $\sigma$={noisy_rover.wheel_sigma}",
+    )
+    plt.plot(regular_states[:, 0], regular_states[:, 1], "b", label="Ground Truth")
     plt.title("$x$ vs $y$ location, max speed = {0}".format(regular_rover.max_speed))
     plt.xlabel("$x$")
     plt.ylabel("$y$")
@@ -96,17 +114,12 @@ def plot_simulation(regular_rover: NoisyRover, noisy_rover: NoisyRover):
     plt.xlim(-1, 2)
     plt.show()
 
+
 def trajectory(t, max_time=10):
     """
     Time varying trajectory for the controls
     """
-    time_splits = [
-        0,
-        0.25*max_time,
-        0.5*max_time,
-        0.75*max_time,
-        max_time
-    ]
+    time_splits = [0, 0.25 * max_time, 0.5 * max_time, 0.75 * max_time, max_time]
 
     if t > time_splits[0] and t <= time_splits[1]:
         return [0.02, 0.02, 0.02, 0.02]
@@ -119,12 +132,13 @@ def trajectory(t, max_time=10):
     else:
         return [0.0, 0.0, 0.0, 0.0]
 
+
 if __name__ == "__main__":
     # Initialize the fourwheel model with
     start, stop, h = 0, 300, 0.01
     rover = NoisyRover(wheel_sigma=0.0, delta_t=h)
     noisy_rover = NoisyRover(wheel_sigma=15.0, delta_t=h)
-    for t in np.arange(start, stop, h):
+    for t in track(np.arange(start, stop, h), description="Running Simulation"):
         wheel_mean = trajectory(t, max_time=stop)
         control = noisy_rover.wheels(wheel_mean)
         noisy_rover.step(control)
