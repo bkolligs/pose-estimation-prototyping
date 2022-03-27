@@ -3,6 +3,7 @@ from rich.progress import track
 import matplotlib.pyplot as plt
 from four_wheel.four_wheel import FourWheel
 from four_wheel.utils import drive_arc_convert
+from progress.progress_bar import KinematicsProgress
 
 
 class NoisyRover:
@@ -136,14 +137,18 @@ def trajectory(t, max_time=10):
 if __name__ == "__main__":
     # Initialize the fourwheel model with
     start, stop, h = 0, 300, 0.01
+    times = np.arange(start, stop, h)
     rover = NoisyRover(wheel_sigma=0.0, delta_t=h)
     noisy_rover = NoisyRover(wheel_sigma=15.0, delta_t=h)
-    for t in track(np.arange(start, stop, h), description="Running Simulation"):
-        wheel_mean = trajectory(t, max_time=stop)
-        control = noisy_rover.wheels(wheel_mean)
-        noisy_rover.step(control)
-        rover.step(wheel_mean)
 
-    print("Simulation Done")
-    print("Ground truth: \n", rover.state, "\nNoisy: \n", noisy_rover.state)
-    plot_simulation(rover, noisy_rover)
+    with KinematicsProgress(len(times), np.zeros_like(rover.state)) as progress:
+        for t in times:
+            wheel_mean = trajectory(t, max_time=stop)
+            control = noisy_rover.wheels(wheel_mean)
+            noisy_rover.step(control)
+            rover.step(wheel_mean)
+            progress.step(rover.state, noisy_rover.state)
+
+        print("Simulation Done")
+        # print("Ground truth: \n", rover.state, "\nNoisy: \n", noisy_rover.state)
+        plot_simulation(rover, noisy_rover)
