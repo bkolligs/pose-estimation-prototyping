@@ -14,7 +14,8 @@ class NoisyRover:
         delta_t=0.01,
         max_speed=0.05,
     ) -> None:
-        self.max_speed = max_speed
+        radius = 0.0955
+        self.max_wheel_speed = max_speed / radius
         self.delta_t = delta_t
         self.wheel_sigma = wheel_sigma
         self.kinematics = FourWheel(0.32195, 0.2222, 0.0745, 0.0955)
@@ -68,7 +69,9 @@ class NoisyRover:
     def step(self, wheel_vel: list):
         if not isinstance(wheel_vel, np.ndarray):
             wheel_vel = np.array(wheel_vel).reshape(-1, 1)
-        wheel_vel = np.clip(wheel_vel, a_min=-self.max_speed, a_max=self.max_speed)
+        # wheel_vel = np.clip(
+        #     wheel_vel, a_min=-self.max_wheel_speed, a_max=self.max_wheel_speed
+        # )
         self.runge_kutta_integration(wheel_vel)
 
     def plot_step(self, t=None):
@@ -107,7 +110,9 @@ def plot_simulation(regular_rover: NoisyRover, noisy_rover: NoisyRover):
         label=f"Noisy, $\sigma$={noisy_rover.wheel_sigma}",
     )
     plt.plot(regular_states[:, 0], regular_states[:, 1], "b", label="Ground Truth")
-    plt.title("$x$ vs $y$ location, max speed = {0}".format(regular_rover.max_speed))
+    plt.title(
+        "$x$ vs $y$ location, max speed = {0}".format(regular_rover.max_wheel_speed)
+    )
     plt.xlabel("$x$")
     plt.ylabel("$y$")
     plt.legend()
@@ -139,7 +144,7 @@ if __name__ == "__main__":
     start, stop, h = 0, 300, 0.01
     times = np.arange(start, stop, h)
     rover = NoisyRover(wheel_sigma=0.0, delta_t=h)
-    noisy_rover = NoisyRover(wheel_sigma=15.0, delta_t=h)
+    noisy_rover = NoisyRover(wheel_sigma=1.0, delta_t=h)
 
     with KinematicsProgress(len(times), np.zeros_like(rover.state)) as progress:
         for t in times:
